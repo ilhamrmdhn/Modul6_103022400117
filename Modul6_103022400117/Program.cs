@@ -1,4 +1,6 @@
-﻿class SayaMusicUser
+﻿using System.Diagnostics;
+
+class SayaMusicUser
 {
     private int id;
     public string Username;
@@ -6,6 +8,8 @@
 
     public SayaMusicUser(string Username)
     {
+        Debug.Assert(Username.Length <= 100, "Panjang maksimal 100 karakter");
+        Debug.Assert(Username != null, "Username tidak boleh kosong!");
         this.Username = Username;
         this.uploadedTracks = new List<SayaMusicTrack>();
     }
@@ -17,6 +21,9 @@
 
     public void AddTrack(SayaMusicTrack track)
     {
+        Debug.Assert(track != null, "Track tidak boleh kosong!");
+        Debug.Assert(track.getPlayCount() == int.MaxValue, "Tidak boleh kurang dari batas maksimum");
+
         uploadedTracks.Add(track);
     }
 
@@ -39,6 +46,9 @@ class SayaMusicTrack
 
     public SayaMusicTrack(string title)
     {
+        Debug.Assert(title != null, "Judul track tidak boleh kosong!");
+        Debug.Assert(title.Length <= 200, "Judul track maksimal 200 karakter!");
+
         this.title = title;
         Random random = new Random();
         this.id = random.Next(10000, 100000);
@@ -47,6 +57,8 @@ class SayaMusicTrack
 
     public void IncreasePlayCount(int count)
     {
+        Debug.Assert(count <= 25000000, "Penambahan maksimal 25.000.000 per pemanggilan");
+        Debug.Assert(count >= 0, "Tidak boleh bilangan negatif");
         this.playCount += count;
     }
 
@@ -55,6 +67,11 @@ class SayaMusicTrack
         Console.WriteLine($"ID Lagu: {this.id}");
         Console.WriteLine($"Judul Lagu: {this.title}");
         Console.WriteLine($"Total Play: {this.playCount}");
+    }
+
+    public int getPlayCount()
+    {
+        return playCount;
     }
 }
 
